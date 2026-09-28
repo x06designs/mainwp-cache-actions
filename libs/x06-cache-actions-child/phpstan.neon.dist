@@ -1,0 +1,17 @@
+# szepeviktor/phpstan-wordpress is auto-included via phpstan/extension-installer.
+parameters:
+    level: 6
+    phpVersion: 70400
+    paths:
+        - x06-cache-actions-child.php
+        - includes
+        - tests
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    scanDirectories:
+        # Stand-ins for Elementor / WP Fastest Cache, which provide these symbols at runtime.
+        - tests/Stubs
+    excludePaths:
+        analyse:
+            - tests/Stubs
+    treatPhpDocTypesAsCertain: false

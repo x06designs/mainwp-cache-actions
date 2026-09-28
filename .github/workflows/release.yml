@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+      - 'child-v[0-9]*'
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      HUSKY: '0'
+    outputs:
+      lib: ${{ steps.plugin.outputs.lib }}
+      version: ${{ steps.plugin.outputs.version }}
+      title: ${{ steps.plugin.outputs.title }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve plugin from tag
+        id: plugin
+        run: bash scripts/release/resolve-tag.sh "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Tag must be on main
+        run: |
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main \
+            || { echo "::error::$GITHUB_REF_NAME is not on main"; exit 1; }
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          extensions: zip
+          coverage: none
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.plugin.outputs.lib == 'x06-cache-actions'
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Build web layer
+        if: steps.plugin.outputs.lib == 'x06-cache-actions'
+        run: |
+          npm ci
+          npx nx run x06-cache-actions:build --skip-nx-cache
+
+      - name: Build zip
+        run: bash scripts/release/build.sh "${{ steps.plugin.outputs.lib }}" "${{ steps.plugin.outputs.version }}"
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-zip
+          path: tmp/release/${{ steps.plugin.outputs.lib }}.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-zip
+          path: tmp/release
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "tmp/release/${{ needs.build.outputs.lib }}.zip" \
+            --verify-tag --title "${{ needs.build.outputs.title }}" --generate-notes
+
+      - name: Add release to the Composer index
+        run: bash scripts/release/publish-index.sh "${{ needs.build.outputs.lib }}" "${{ needs.build.outputs.version }}" "$GITHUB_REF_NAME"

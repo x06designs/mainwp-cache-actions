@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "x06-cache-actions/v1/cache-actions",
+  "title": "CacheActionRequest",
+  "description": "Single source of truth for the Cache Actions feature. `properties` are the AJAX request args (validated via rest_*_value_from_schema). `definitions.ChildResult` is the companion's payload (validated on receipt, so it must stay free of $ref); `definitions.CacheActionResponse` is what the AJAX endpoint returns.",
+  "type": "object",
+  "properties": {
+    "site_id": {
+      "type": "integer",
+      "description": "MainWP child site id.",
+      "minimum": 1
+    },
+    "op": {
+      "type": "string",
+      "description": "Operation to run on the child site.",
+      "enum": ["clear_caches", "clear_caches_minified", "sync_library"]
+    }
+  },
+  "required": ["site_id", "op"],
+  "definitions": {
+    "ChildResult": {
+      "type": "object",
+      "title": "ChildResult",
+      "description": "The companion's result under `x06_cache_actions` in the extra_execution response.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["clear_caches", "clear_caches_minified", "sync_library"]
+        },
+        "companion_version": { "type": "string" },
+        "api_version": { "type": "integer", "enum": [1] },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "StepResult",
+            "properties": {
+              "step": {
+                "type": "string",
+                "enum": [
+                  "elementor_clear_cache",
+                  "wpfc_delete_cache",
+                  "wpfc_delete_cache_and_minified",
+                  "elementor_sync_library"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": ["done", "skipped", "failed"]
+              },
+              "detail": {
+                "type": ["string", "null"],
+                "enum": [
+                  "plugin_inactive",
+                  "delete_failed",
+                  "library_sync_failed",
+                  "info_sync_failed",
+                  "sync_failed",
+                  "exception",
+                  null
+                ]
+              },
+              "error": { "type": "string" }
+            },
+            "required": ["step", "status", "detail"]
+          }
+        }
+      },
+      "required": ["op", "companion_version", "api_version", "steps"]
+    },
+    "CacheActionResponse": {
+      "type": "object",
+      "title": "CacheActionResponse",
+      "description": "AJAX response body. `result` is present when the companion answered; `code` (and optionally `message`) when it did not.",
+      "additionalProperties": false,
+      "properties": {
+        "site_id": { "type": "integer" },
+        "op": {
+          "type": "string",
+          "enum": ["clear_caches", "clear_caches_minified", "sync_library"]
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "invalid_request",
+            "forbidden",
+            "extension_rejected",
+            "site_suspended",
+            "connection_failed",
+            "companion_missing",
+            "companion_outdated"
+          ]
+        },
+        "message": { "type": "string" },
+        "result": { "$ref": "#/definitions/ChildResult" }
+      }
+    }
+  }
+}

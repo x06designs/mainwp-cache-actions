@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<ruleset name="X06CacheActions">
+	<description>Coding standards for the X06 Cache Actions plugin.</description>
+
+	<file>includes/</file>
+	<file>tests/</file>
+
+	<!-- Signatures of MainWP functions for PHPStan; they mirror foreign code. -->
+	<exclude-pattern>*/tests/Stubs/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<rule ref="WordPress">
+		<!-- PSR-4 uses PascalCase.php, not class-*.php. -->
+		<exclude name="WordPress.Files.FileName"/>
+		<!-- Self-documenting typed code: no docblock required on every file/method. -->
+		<exclude name="Squiz.Commenting.FileComment"/>
+		<exclude name="Squiz.Commenting.FunctionComment"/>
+		<exclude name="Squiz.Commenting.ClassComment"/>
+		<exclude name="Squiz.Commenting.VariableComment"/>
+		<exclude name="Generic.Commenting.DocComment"/>
+		<!-- PSR-style typed code: camelCase locals + short ternaries. -->
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"/>
+		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+		<exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound"/>
+		<!-- Components read their own *.schema.json via file_get_contents (local, not remote). -->
+		<exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents"/>
+		<!--
+			Cosmetic `=>`/`=` column alignment cannot be satisfied by a tokenized
+			generator (alignment depends on the rendered identifier widths, which vary
+			per feature/name). Disable the alignment sniffs so generated code is
+			lint-clean out of the box; run `composer fix` to re-align by hand if desired.
+		-->
+		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+		<exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+	</rule>
+
+	<!-- These files invoke MainWP Dashboard hooks, whose names are MainWP's, not ours. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound">
+		<exclude-pattern>*/includes/Features/CacheActions/MainWpChildGateway.php</exclude-pattern>
+		<exclude-pattern>*/includes/Features/CacheActions/CacheActionsModule.php</exclude-pattern>
+	</rule>
+
+	<!-- Feature templates + test bootstraps legitimately use unprefixed locals at file scope. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>*/tests/bootstrap-*.php</exclude-pattern>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="6.4"/>
+	<config name="testVersion" value="8.3-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="x06-cache-actions"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="x06_cache_actions"/>
+				<element value="X06_CACHE_ACTIONS"/>
+				<element value="X06CacheActions"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

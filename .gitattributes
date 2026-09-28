@@ -1,0 +1,8 @@
+# LF everywhere. Without this, core.autocrlf rewrites the committed generated/
+# PHP-TS contract on checkout, and the ci:drift gate
+# (`git diff --exit-code -- generated`) fails on line endings alone, forever.
+* text=auto eol=lf
+
+generated/** text eol=lf
+*.sh text eol=lf
+*.php text eol=lf

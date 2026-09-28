@@ -1,0 +1,34 @@
+# Plugins (libs/<slug>)
+libs/*/vendor
+libs/*/build
+libs/*/node_modules
+libs/*/generated/*.tsbuildinfo
+
+# Node / Nx
+node_modules/
+.nx/cache
+.nx/workspace-data
+
+# Secrets and local config
+auth.json
+.env
+.env.*
+!.env.example
+.lando.local.yml
+.lando.user.yml
+
+# PHPUnit
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache
+
+# Build and debug output
+tmp/
+*.log
+/test-results/
+/playwright-report/
+.playwright-mcp/
+
+# OS
+.DS_Store
+Thumbs.db

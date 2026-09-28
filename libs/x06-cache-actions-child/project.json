@@ -1,0 +1,16 @@
+{
+  "name": "x06-cache-actions-child",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/x06-cache-actions-child",
+  "targets": {
+    "lib-gates": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "bash scripts/lib-gates.sh x06-cache-actions-child",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

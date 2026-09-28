@@ -1,0 +1,24 @@
+# szepeviktor/phpstan-wordpress is auto-included via phpstan/extension-installer.
+# WordPress core symbols come from php-stubs/wordpress-stubs (scanned by the extension).
+parameters:
+    level: 6
+    paths:
+        - includes
+        - tests
+    bootstrapFiles:
+        # Plugin constants so PHPStan can resolve references to them in includes/.
+        - tests/phpstan-bootstrap.php
+    scanDirectories:
+        # The companion, whose classes the contract test reads.
+        - ../x06-cache-actions-child/includes
+    scanFiles:
+        # MainWP Dashboard functions (MainWP provides them at runtime).
+        - tests/Stubs/mainwp.php
+        # WP_UnitTestCase and friends for the integration suite.
+        - vendor/php-stubs/wordpress-tests-stubs/wordpress-tests-stubs.php
+    excludePaths:
+        analyse:
+            # The integration bootstrap loads the WP test library at runtime.
+            - tests/bootstrap-integration.php
+            - tests/Stubs
+    treatPhpDocTypesAsCertain: false

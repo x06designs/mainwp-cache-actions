@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<ruleset name="X06CacheActionsChild">
+	<description>Coding standards for the X06 Cache Actions Child plugin.</description>
+
+	<file>x06-cache-actions-child.php</file>
+	<file>includes/</file>
+	<file>tests/</file>
+
+	<!-- Stand-ins for third-party classes (Elementor, WP Fastest Cache); they mirror foreign code. -->
+	<exclude-pattern>*/tests/Stubs/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<rule ref="WordPress">
+		<!-- PSR-4 uses PascalCase.php, not class-*.php. -->
+		<exclude name="WordPress.Files.FileName"/>
+		<!-- Self-documenting typed code: no docblock required on every file/method. -->
+		<exclude name="Squiz.Commenting.FileComment"/>
+		<exclude name="Squiz.Commenting.FunctionComment"/>
+		<exclude name="Squiz.Commenting.ClassComment"/>
+		<exclude name="Squiz.Commenting.VariableComment"/>
+		<exclude name="Generic.Commenting.DocComment"/>
+		<!-- PSR-style typed code: camelCase locals + short ternaries. -->
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"/>
+		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+		<exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+	</rule>
+
+	<!-- Tests set the foreign globals and fire the foreign hooks the code under test reads. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound">
+		<exclude-pattern>*/tests/Doubles/*</exclude-pattern>
+	</rule>
+	<!-- The WPFC double mirrors WpFastestCache::deleteCache(), whose name is not ours to choose. -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+		<exclude-pattern>*/tests/Doubles/FakeWpFastestCache.php</exclude-pattern>
+	</rule>
+
+	<!-- Runs on client sites next to MainWP Child, whose floor is WP 6.2 / PHP 7.4. -->
+	<config name="minimum_supported_wp_version" value="6.2"/>
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="x06-cache-actions-child"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="x06_cache_actions_child"/>
+				<element value="X06_CACHE_ACTIONS_CHILD"/>
+				<element value="X06CacheActionsChild"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
