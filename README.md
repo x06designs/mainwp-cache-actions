@@ -7,7 +7,7 @@ The project has two plugins:
 
 | Plugin | Installed on | Requires |
 |---|---|---|
-| **X06 Cache Actions** | the MainWP Dashboard site | WordPress 6.4+, PHP 8.3+, MainWP Dashboard |
+| **X06 Cache Actions** | the MainWP Dashboard site | WordPress 6.4+, PHP 8.2+, MainWP Dashboard |
 | **X06 Cache Actions Child** | every child site | WordPress 6.2+, PHP 7.4+, MainWP Child |
 
 ## What it does

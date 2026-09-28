@@ -49,7 +49,7 @@
 	</rule>
 
 	<config name="minimum_supported_wp_version" value="6.4"/>
-	<config name="testVersion" value="8.3-"/>
+	<config name="testVersion" value="8.2-"/>
 	<rule ref="PHPCompatibilityWP"/>
 
 	<rule ref="WordPress.WP.I18n">

@@ -10,7 +10,7 @@ side is `libs/x06-cache-actions-child`.
 | Clear caches + minified | `clear_caches_minified` |
 | Sync Elementor library | `sync_library` |
 
-Requires the MainWP Dashboard (`Requires Plugins: mainwp`) and PHP 8.3. Stores no data.
+Requires the MainWP Dashboard (`Requires Plugins: mainwp`) and PHP 8.2+. Stores no data.
 
 ## Installing and updating
 

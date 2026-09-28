@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97869b48e9ead78a4e796d23a48ccf79",
+    "content-hash": "008b7a3259522eca9670eb72ff7f141b",
     "packages": [
         {
             "name": "inpsyde/modularity",
@@ -3284,11 +3284,11 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3"
+        "php": ">=8.2"
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.3"
+        "php": "8.2"
     },
     "plugin-api-version": "2.9.0"
 }

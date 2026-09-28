@@ -31,7 +31,7 @@ const runner = runners.find((r) => available(r.cmd, r.probe));
 if (!runner) {
   console.error(
     'No PHP available: neither `php` nor `lando` is on PATH.\n' +
-      'Install PHP 8.3 on the host or start a Lando environment for this repository.',
+      'Install PHP 8.2+ on the host or start a Lando environment for this repository.',
   );
   process.exit(1);
 }

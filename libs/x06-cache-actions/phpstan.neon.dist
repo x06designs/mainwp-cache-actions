@@ -2,6 +2,7 @@
 # WordPress core symbols come from php-stubs/wordpress-stubs (scanned by the extension).
 parameters:
     level: 6
+    phpVersion: 80200
     paths:
         - includes
         - tests

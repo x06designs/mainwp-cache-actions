@@ -34,7 +34,7 @@ final class PluginBootTest extends WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				'requires_plugins' => 'mainwp',
-				'requires_php'     => '8.3',
+				'requires_php'     => '8.2',
 				'text_domain'      => 'x06-cache-actions',
 			),
 			$header

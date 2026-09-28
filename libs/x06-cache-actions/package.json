@@ -1,6 +1,6 @@
 {
   "name": "@x06designs/x06-cache-actions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Web layer for the X06 Cache Actions WordPress plugin.",
   "type": "module",

@@ -25,6 +25,9 @@ sed -i -E \
 if [ "$lib" = "x06-cache-actions" ]; then
   sed -i -E "s/^(  \"version\": \")[^\"]*(\",)/\1$version\2/" "$lib_dir/package.json"
   (cd "$repo_root" && npx nx run "$lib:gen" --skip-nx-cache)
+  if [ -f "$repo_root/scripts/local-env.sh" ]; then
+    bash "$repo_root/scripts/local-env.sh" flush
+  fi
 fi
 
 grep -nE "^ \* Version:|_VERSION " "$main"
