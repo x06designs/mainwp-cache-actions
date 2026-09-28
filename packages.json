@@ -1,5 +1,22 @@
 {
     "packages": {
+        "x06designs/x06-cache-actions": {
+            "0.1.0": {
+                "name": "x06designs/x06-cache-actions",
+                "version": "0.1.0",
+                "type": "wordpress-plugin",
+                "description": "X06 Cache Actions WordPress plugin.",
+                "license": "GPL-2.0-or-later",
+                "require": {
+                    "php": ">=8.3"
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/x06designs/mainwp-cache-actions/releases/download/v0.1.0/x06-cache-actions.zip",
+                    "shasum": "eea3a38deaa75a322107430209388b8cf0903f10"
+                }
+            }
+        },
         "x06designs/x06-cache-actions-child": {
             "0.1.0": {
                 "name": "x06designs/x06-cache-actions-child",
